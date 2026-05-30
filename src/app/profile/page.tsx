@@ -22,6 +22,10 @@ export default function ProfilePage() {
     try {
       setLoading(true);
       const res = await axios.get("/api/users/me");
+      if (!res.data.data) {
+        router.replace("/login");
+        return;
+      }
       setUser(res.data.data);
     } catch (error) {
       const message =
@@ -43,8 +47,10 @@ export default function ProfilePage() {
     try {
       setLoggingOut(true);
       await axios.get("/api/users/logout");
+      setUser(null);
       toast.success("Logged out successfully");
-      router.push("/login");
+      router.replace("/login");
+      router.refresh();
     } catch (error) {
       const message =
         axios.isAxiosError(error) && error.response?.data?.error

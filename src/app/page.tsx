@@ -53,6 +53,8 @@ export default function Home() {
       await axios.get("/api/users/logout");
       setUser(null);
       toast.success("Signed out successfully");
+      router.replace("/");
+      router.refresh();
     } catch {
       toast.error("Failed to sign out");
     } finally {

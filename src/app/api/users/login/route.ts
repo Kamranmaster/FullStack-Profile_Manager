@@ -5,6 +5,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import {
+  getTokenCookieOptions,
+  TOKEN_COOKIE_NAME,
+} from "@/lib/auth-cookie";
 
 export async function POST(request: NextRequest) {
   try {
@@ -63,9 +67,10 @@ export async function POST(request: NextRequest) {
       { status: 200 },
     );
 
-    response.cookies.set("token",token,{
-        httpOnly:true,
-    })
+    response.cookies.set(TOKEN_COOKIE_NAME, token, {
+      ...getTokenCookieOptions(),
+      maxAge: 60 * 60 * 24,
+    });
 
     return response;
   } catch (error) {
